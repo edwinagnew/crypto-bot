@@ -26,7 +26,7 @@ class Strategy:
     def strat_1(self, new_price):
         """
         Strategy 1 will:
-            BUY: When the graph has been falling for a bit and then platos off
+            BUY: When the graph has been falling for a bit and then platops off
             SELL: When the graph has been increasing for a bit and then platos off
         """
         last_price = 0
