@@ -3,9 +3,9 @@ import pandas as pd
 from datetime import datetime
 
 
-Class Eval:
+class Eval:
 
-	def __init__(strategy, data_path = "data/kraken_cleaned.csv", verbose=False):
+	def __init__(self, strategy, data_path = "data/kraken_cleaned.csv", verbose=False):
 		self.strategy = strategy
 		self.df = pd.read_csv(data_path)
 
@@ -18,7 +18,7 @@ Class Eval:
 		self.verbose = verbose
 
 
-		self.evlauate_strategy()
+		self.evaluate_strategy()
 
 
 
@@ -40,34 +40,40 @@ Class Eval:
 
 	def buy(self, amount, price):
 		#API CALL
+		if self.cash == 0:
+			print("youre broke son")
 
-		self.cash -= amount * price
-		self.btc += price/amount
+		else:
+			self.cash -= amount * price
+			self.btc += price/amount
 
-		time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+			time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-		purchase = time + "Buying " + str(price/amount) + "BTC at price, " + str(price) + "USD"
-		if self.verbose: 
-			print(purchase)
-			print("CASH:" self.cash, "USD, BTC:", self.btc)
-		self.purchases.append(purchase)
+			purchase = time + " Buying " + str(price/amount) + "BTC at price, " + str(price) + "USD"
+			if self.verbose: 
+				print(purchase)
+				print("CASH:", self.cash, "USD, BTC:", self.btc)
+			self.purchases.append(purchase)
 
 
 
 
 	def sell(self, amount, price):
 		#API CALL
+		if self.btc == 0:
+			print("havent got any mate")
 
-		self.cash += amount * price
-		self.btc -= price/amount
+		else:
+			self.cash += amount * price
+			self.btc -= price/amount
 
-		time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+			time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-		sale = time + "Selling " + str(price/amount) + "BTC at price, " + str(price) + "USD"
-		if self.verbose: 
-			print(sale)
-			print("CASH:" self.cash, "USD, BTC:", self.btc)
-		self.sales.append(sale)
+			sale = time + " Selling " + str(price/amount) + "BTC at price, " + str(price) + "USD"
+			if self.verbose: 
+				print(sale)
+				print("CASH:",self.cash, "USD, BTC:", self.btc)
+			self.sales.append(sale)
 
 
 	def sell_all(self,price):
@@ -75,10 +81,12 @@ Class Eval:
 		self.cash += self.btc * price
 		self.btc = 0
 
-		sale = time + "Selling all " + str(self.btc) + "BTC at price, " + str(price) + "USD"
+		time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+		sale = time + " Selling all " + str(self.btc) + "BTC at price, " + str(price) + "USD"
 		if self.verbose: 
 			print(sale)
-			print("CASH:" self.cash, "USD, BTC:", self.btc)
+			print("CASH:" , self.cash, "USD, BTC:", self.btc)
 		self.sales.append(sale)
 
 
