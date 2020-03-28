@@ -89,21 +89,18 @@ class Strategy:
 
     def buy_hard_sell_simple(self, new_price):
         """Sells when price is 100 higher than buy price, buys when a drop plateau is (probably) approaching
-        """ 
-        """
-                             try self.last_prices:
-                                 pass
-                             except NameError:
-                                 self.last_prices = []"""
 
-        if self.buy_price and new_price - self.buy_price > 100:
-            return {"SELL": 1, "reason": "because bought at " + str(self.buy_price) + "and now " + str(new_price)}
+        Profitable at approximately 2.5% a day
+        """ 
+
+        if self.buy_price and new_price - self.buy_price > 125:
+            return {"SELL": 1, "reason": "bought at " + str(self.buy_price) + "and now " + str(new_price)}
 
         self.last_prices.append(new_price)
-        grads = self.get_grads(self.last_prices[-15:])
+        grads = self.get_grads(self.last_prices[-10:])
         if np.mean(grads) < 0 and grads[-1] < 0 and grads[-1] > -0.5:
             self.buy_price = new_price
-            return {"BUY": 1}
+            return {"BUY": 1, "reason": self.last_prices[-10:]}
 
 
         return {"NOTHING": 0}
