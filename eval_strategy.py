@@ -7,11 +7,11 @@ import Stategies
 
 class Eval:
 
-	def __init__(self, nstrat, data_path = "data/kraken_cleaned.csv", verbose=False):
+	def __init__(self, nstrat, data_path = "data/kraken_cleaned.csv", verbose=True):
 		self.stat = Stategies.Strategy(nstrat, rand_prop=False)
 		#self.strategy_number = nstrat
 
-		self.df = pd.read_csv(data_path)
+		self.df = pd.read_csv(data_path)[2100:]
 
 		self.cash = 500
 		self.btc = 0
@@ -27,7 +27,7 @@ class Eval:
 
 
 	def evaluate_strategy(self):
-		"""Goes through every single price in the dataset and 
+		"""Goes through every single price in the dataset and simulates whether the strategy would buy or sell at that price and calculates profit
 		"""
 		last_price = 0
 		for index, row in self.df.iterrows():
@@ -35,6 +35,7 @@ class Eval:
 			response = self.stat.eval(row['Weighted_Price']) #response will be in format {'BUY': amount} , {'SELL': amount} or {'NOTHING': None} where amount is proportion of current assets
 			if "SELL" in response:
 				self.sell(response["SELL"] * self.btc, row['Weighted_Price'])
+				if "reason" in response: print(response["reason"])
 			elif "BUY" in response:
 				self.buy(response["BUY"] * self.cash, row['Weighted_Price'])
 			last_price = row['Weighted_Price']
